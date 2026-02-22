@@ -1,0 +1,829 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "d80a3082",
+   "metadata": {
+    "papermill": {
+     "duration": 0.004561,
+     "end_time": "2026-02-22T10:32:03.555470",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:03.550909",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "**This notebook is an exercise in the [Introduction to Machine Learning](https://www.kaggle.com/learn/intro-to-machine-learning) course.  You can reference the tutorial at [this link](https://www.kaggle.com/dansbecker/your-first-machine-learning-model).**\n",
+    "\n",
+    "---\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c2bbf347",
+   "metadata": {
+    "papermill": {
+     "duration": 0.003514,
+     "end_time": "2026-02-22T10:32:03.562917",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:03.559403",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Recap\n",
+    "So far, you have loaded your data and reviewed it with the following code. Run this cell to set up your coding environment where the previous step left off."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "8bf939e1",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-22T10:32:03.571834Z",
+     "iopub.status.busy": "2026-02-22T10:32:03.571469Z",
+     "iopub.status.idle": "2026-02-22T10:32:08.159330Z",
+     "shell.execute_reply": "2026-02-22T10:32:08.158221Z"
+    },
+    "papermill": {
+     "duration": 4.594168,
+     "end_time": "2026-02-22T10:32:08.160906",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:03.566738",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Setup Complete\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Code you have previously used to load data\n",
+    "import pandas as pd\n",
+    "\n",
+    "# Path of the file to read\n",
+    "iowa_file_path = '../input/home-data-for-ml-course/train.csv'\n",
+    "\n",
+    "home_data = pd.read_csv(iowa_file_path)\n",
+    "\n",
+    "# Set up code checking\n",
+    "from learntools.core import binder\n",
+    "binder.bind(globals())\n",
+    "from learntools.machine_learning.ex3 import *\n",
+    "\n",
+    "print(\"Setup Complete\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "55f74dc7",
+   "metadata": {
+    "papermill": {
+     "duration": 0.003581,
+     "end_time": "2026-02-22T10:32:08.168380",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.164799",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "# Exercises\n",
+    "\n",
+    "## Step 1: Specify Prediction Target\n",
+    "Select the target variable, which corresponds to the sales price. Save this to a new variable called `y`. You'll need to print a list of the columns to find the name of the column you need.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "4700472b",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-22T10:32:08.177116Z",
+     "iopub.status.busy": "2026-02-22T10:32:08.176707Z",
+     "iopub.status.idle": "2026-02-22T10:32:08.185517Z",
+     "shell.execute_reply": "2026-02-22T10:32:08.184551Z"
+    },
+    "papermill": {
+     "duration": 0.014939,
+     "end_time": "2026-02-22T10:32:08.187030",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.172091",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Index(['Id', 'MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street',\n",
+       "       'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig',\n",
+       "       'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType',\n",
+       "       'HouseStyle', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd',\n",
+       "       'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'MasVnrType',\n",
+       "       'MasVnrArea', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual',\n",
+       "       'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinSF1',\n",
+       "       'BsmtFinType2', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', 'Heating',\n",
+       "       'HeatingQC', 'CentralAir', 'Electrical', '1stFlrSF', '2ndFlrSF',\n",
+       "       'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath',\n",
+       "       'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'KitchenQual',\n",
+       "       'TotRmsAbvGrd', 'Functional', 'Fireplaces', 'FireplaceQu', 'GarageType',\n",
+       "       'GarageYrBlt', 'GarageFinish', 'GarageCars', 'GarageArea', 'GarageQual',\n",
+       "       'GarageCond', 'PavedDrive', 'WoodDeckSF', 'OpenPorchSF',\n",
+       "       'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC',\n",
+       "       'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType',\n",
+       "       'SaleCondition', 'SalePrice'],\n",
+       "      dtype='object')"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# print the list of columns in the dataset to find the name of the prediction target\n",
+    "home_data.columns"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "3c9ba670",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-22T10:32:08.196979Z",
+     "iopub.status.busy": "2026-02-22T10:32:08.196204Z",
+     "iopub.status.idle": "2026-02-22T10:32:08.209944Z",
+     "shell.execute_reply": "2026-02-22T10:32:08.208960Z"
+    },
+    "papermill": {
+     "duration": 0.02031,
+     "end_time": "2026-02-22T10:32:08.211502",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.191192",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "application/javascript": [
+       "parent.postMessage({\"jupyterEvent\": \"custom.exercise_interaction\", \"data\": {\"outcomeType\": 1, \"valueTowardsCompletion\": 0.25, \"interactionType\": 1, \"questionType\": 2, \"questionId\": \"1_SetTarget\", \"learnToolsVersion\": \"0.3.5\", \"failureMessage\": \"\", \"exceptionClass\": \"\", \"trace\": \"\"}}, \"*\")"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Javascript object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "<span style=\"color:#33cc33\">Correct</span>"
+      ],
+      "text/plain": [
+       "Correct"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "y = home_data.SalePrice\n",
+    "\n",
+    "# Check your answer\n",
+    "step_1.check()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "35bc01a8",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-22T10:32:08.221041Z",
+     "iopub.status.busy": "2026-02-22T10:32:08.220735Z",
+     "iopub.status.idle": "2026-02-22T10:32:08.225364Z",
+     "shell.execute_reply": "2026-02-22T10:32:08.224449Z"
+    },
+    "papermill": {
+     "duration": 0.011346,
+     "end_time": "2026-02-22T10:32:08.226994",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.215648",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# The lines below will show you a hint or the solution.\n",
+    "# step_1.hint() \n",
+    "# step_1.solution()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "08ea09fd",
+   "metadata": {
+    "papermill": {
+     "duration": 0.003724,
+     "end_time": "2026-02-22T10:32:08.234959",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.231235",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 2: Create X\n",
+    "Now you will create a DataFrame called `X` holding the predictive features.\n",
+    "\n",
+    "Since you want only some columns from the original data, you'll first create a list with the names of the columns you want in `X`.\n",
+    "\n",
+    "You'll use just the following columns in the list (you can copy and paste the whole list to save some typing, though you'll still need to add quotes):\n",
+    "  * LotArea\n",
+    "  * YearBuilt\n",
+    "  * 1stFlrSF\n",
+    "  * 2ndFlrSF\n",
+    "  * FullBath\n",
+    "  * BedroomAbvGr\n",
+    "  * TotRmsAbvGrd\n",
+    "\n",
+    "After you've created that list of features, use it to create the DataFrame that you'll use to fit the model."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "494ae3ce",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-22T10:32:08.244926Z",
+     "iopub.status.busy": "2026-02-22T10:32:08.244583Z",
+     "iopub.status.idle": "2026-02-22T10:32:08.255892Z",
+     "shell.execute_reply": "2026-02-22T10:32:08.254915Z"
+    },
+    "papermill": {
+     "duration": 0.018172,
+     "end_time": "2026-02-22T10:32:08.257233",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.239061",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "application/javascript": [
+       "parent.postMessage({\"jupyterEvent\": \"custom.exercise_interaction\", \"data\": {\"outcomeType\": 1, \"valueTowardsCompletion\": 0.25, \"interactionType\": 1, \"questionType\": 2, \"questionId\": \"2_SelectPredictionData\", \"learnToolsVersion\": \"0.3.5\", \"failureMessage\": \"\", \"exceptionClass\": \"\", \"trace\": \"\"}}, \"*\")"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Javascript object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "<span style=\"color:#33cc33\">Correct</span>"
+      ],
+      "text/plain": [
+       "Correct"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "# Create the list of features below\n",
+    "feature_names = [\n",
+    "    'LotArea',\n",
+    "    'YearBuilt',\n",
+    "    '1stFlrSF',\n",
+    "    '2ndFlrSF',\n",
+    "    'FullBath',\n",
+    "    'BedroomAbvGr',\n",
+    "    'TotRmsAbvGrd'\n",
+    "]\n",
+    "\n",
+    "# Select data corresponding to features in feature_names\n",
+    "X = home_data[feature_names]\n",
+    "\n",
+    "# Check your answer\n",
+    "step_2.check()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "bc0e43cc",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-22T10:32:08.267108Z",
+     "iopub.status.busy": "2026-02-22T10:32:08.266776Z",
+     "iopub.status.idle": "2026-02-22T10:32:08.270792Z",
+     "shell.execute_reply": "2026-02-22T10:32:08.269894Z"
+    },
+    "papermill": {
+     "duration": 0.010708,
+     "end_time": "2026-02-22T10:32:08.272313",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.261605",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# step_2.hint()\n",
+    "# step_2.solution()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9d763aae",
+   "metadata": {
+    "papermill": {
+     "duration": 0.003914,
+     "end_time": "2026-02-22T10:32:08.280570",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.276656",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Review Data\n",
+    "Before building a model, take a quick look at **X** to verify it looks sensible"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "6adf998b",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-22T10:32:08.291061Z",
+     "iopub.status.busy": "2026-02-22T10:32:08.290750Z",
+     "iopub.status.idle": "2026-02-22T10:32:08.308766Z",
+     "shell.execute_reply": "2026-02-22T10:32:08.307669Z"
+    },
+    "papermill": {
+     "duration": 0.025345,
+     "end_time": "2026-02-22T10:32:08.310652",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.285307",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<bound method NDFrame.describe of       LotArea  YearBuilt  1stFlrSF  2ndFlrSF  FullBath  BedroomAbvGr  \\\n",
+      "0        8450       2003       856       854         2             3   \n",
+      "1        9600       1976      1262         0         2             3   \n",
+      "2       11250       2001       920       866         2             3   \n",
+      "3        9550       1915       961       756         1             3   \n",
+      "4       14260       2000      1145      1053         2             4   \n",
+      "...       ...        ...       ...       ...       ...           ...   \n",
+      "1455     7917       1999       953       694         2             3   \n",
+      "1456    13175       1978      2073         0         2             3   \n",
+      "1457     9042       1941      1188      1152         2             4   \n",
+      "1458     9717       1950      1078         0         1             2   \n",
+      "1459     9937       1965      1256         0         1             3   \n",
+      "\n",
+      "      TotRmsAbvGrd  \n",
+      "0                8  \n",
+      "1                6  \n",
+      "2                6  \n",
+      "3                7  \n",
+      "4                9  \n",
+      "...            ...  \n",
+      "1455             7  \n",
+      "1456             7  \n",
+      "1457             9  \n",
+      "1458             5  \n",
+      "1459             6  \n",
+      "\n",
+      "[1460 rows x 7 columns]>\n",
+      "<bound method NDFrame.head of       LotArea  YearBuilt  1stFlrSF  2ndFlrSF  FullBath  BedroomAbvGr  \\\n",
+      "0        8450       2003       856       854         2             3   \n",
+      "1        9600       1976      1262         0         2             3   \n",
+      "2       11250       2001       920       866         2             3   \n",
+      "3        9550       1915       961       756         1             3   \n",
+      "4       14260       2000      1145      1053         2             4   \n",
+      "...       ...        ...       ...       ...       ...           ...   \n",
+      "1455     7917       1999       953       694         2             3   \n",
+      "1456    13175       1978      2073         0         2             3   \n",
+      "1457     9042       1941      1188      1152         2             4   \n",
+      "1458     9717       1950      1078         0         1             2   \n",
+      "1459     9937       1965      1256         0         1             3   \n",
+      "\n",
+      "      TotRmsAbvGrd  \n",
+      "0                8  \n",
+      "1                6  \n",
+      "2                6  \n",
+      "3                7  \n",
+      "4                9  \n",
+      "...            ...  \n",
+      "1455             7  \n",
+      "1456             7  \n",
+      "1457             9  \n",
+      "1458             5  \n",
+      "1459             6  \n",
+      "\n",
+      "[1460 rows x 7 columns]>\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Review data\n",
+    "# print description or statistics from X\n",
+    "print(X.describe)\n",
+    "\n",
+    "# print the top few lines\n",
+    "print(X.head)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1aa6da05",
+   "metadata": {
+    "papermill": {
+     "duration": 0.004029,
+     "end_time": "2026-02-22T10:32:08.319128",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.315099",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 3: Specify and Fit Model\n",
+    "Create a `DecisionTreeRegressor` and save it iowa_model. Ensure you've done the relevant import from sklearn to run this command.\n",
+    "\n",
+    "Then fit the model you just created using the data in `X` and `y` that you saved above."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "89dce881",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-22T10:32:08.328868Z",
+     "iopub.status.busy": "2026-02-22T10:32:08.328542Z",
+     "iopub.status.idle": "2026-02-22T10:32:08.345720Z",
+     "shell.execute_reply": "2026-02-22T10:32:08.344763Z"
+    },
+    "papermill": {
+     "duration": 0.023993,
+     "end_time": "2026-02-22T10:32:08.347354",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.323361",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "data": {
+      "application/javascript": [
+       "parent.postMessage({\"jupyterEvent\": \"custom.exercise_interaction\", \"data\": {\"outcomeType\": 1, \"valueTowardsCompletion\": 0.25, \"interactionType\": 1, \"questionType\": 2, \"questionId\": \"3_CreateModel\", \"learnToolsVersion\": \"0.3.5\", \"failureMessage\": \"\", \"exceptionClass\": \"\", \"trace\": \"\"}}, \"*\")"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Javascript object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "<span style=\"color:#33cc33\">Correct</span>"
+      ],
+      "text/plain": [
+       "Correct"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "from sklearn.tree import DecisionTreeRegressor\n",
+    "#specify the model. \n",
+    "#For model reproducibility, set a numeric value for random_state when specifying the model\n",
+    "iowa_model = DecisionTreeRegressor(random_state=1)\n",
+    "\n",
+    "# Fit the model\n",
+    "iowa_model.fit(X, y)\n",
+    "\n",
+    "# Check your answer\n",
+    "step_3.check()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "d7d0cb57",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-22T10:32:08.358301Z",
+     "iopub.status.busy": "2026-02-22T10:32:08.357931Z",
+     "iopub.status.idle": "2026-02-22T10:32:08.362405Z",
+     "shell.execute_reply": "2026-02-22T10:32:08.361330Z"
+    },
+    "papermill": {
+     "duration": 0.011627,
+     "end_time": "2026-02-22T10:32:08.363950",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.352323",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# step_3.hint()\n",
+    "# step_3.solution()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9766b38c",
+   "metadata": {
+    "papermill": {
+     "duration": 0.004371,
+     "end_time": "2026-02-22T10:32:08.374953",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.370582",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Step 4: Make Predictions\n",
+    "Make predictions with the model's `predict` command using `X` as the data. Save the results to a variable called `predictions`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "04b45d3b",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-22T10:32:08.385266Z",
+     "iopub.status.busy": "2026-02-22T10:32:08.384903Z",
+     "iopub.status.idle": "2026-02-22T10:32:08.397200Z",
+     "shell.execute_reply": "2026-02-22T10:32:08.396084Z"
+    },
+    "papermill": {
+     "duration": 0.019346,
+     "end_time": "2026-02-22T10:32:08.398805",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.379459",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[208500. 181500. 223500. ... 266500. 142125. 147500.]\n"
+     ]
+    },
+    {
+     "data": {
+      "application/javascript": [
+       "parent.postMessage({\"jupyterEvent\": \"custom.exercise_interaction\", \"data\": {\"outcomeType\": 1, \"valueTowardsCompletion\": 0.25, \"interactionType\": 1, \"questionType\": 2, \"questionId\": \"4_MakePredictions\", \"learnToolsVersion\": \"0.3.5\", \"failureMessage\": \"\", \"exceptionClass\": \"\", \"trace\": \"\"}}, \"*\")"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Javascript object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/markdown": [
+       "<span style=\"color:#33cc33\">Correct</span>"
+      ],
+      "text/plain": [
+       "Correct"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "predictions = iowa_model.predict(X)\n",
+    "print(predictions)\n",
+    "\n",
+    "# Check your answer\n",
+    "step_4.check()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "71e84a6d",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-22T10:32:08.409838Z",
+     "iopub.status.busy": "2026-02-22T10:32:08.409530Z",
+     "iopub.status.idle": "2026-02-22T10:32:08.414096Z",
+     "shell.execute_reply": "2026-02-22T10:32:08.412990Z"
+    },
+    "papermill": {
+     "duration": 0.012078,
+     "end_time": "2026-02-22T10:32:08.415818",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.403740",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# step_4.hint()\n",
+    "# step_4.solution()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "001c5d65",
+   "metadata": {
+    "papermill": {
+     "duration": 0.004638,
+     "end_time": "2026-02-22T10:32:08.425393",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.420755",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "## Think About Your Results\n",
+    "\n",
+    "Use the `head` method to compare the top few predictions to the actual home values (in `y`) for those same homes. Anything surprising?\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "5579c65b",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-02-22T10:32:08.436124Z",
+     "iopub.status.busy": "2026-02-22T10:32:08.435791Z",
+     "iopub.status.idle": "2026-02-22T10:32:08.440571Z",
+     "shell.execute_reply": "2026-02-22T10:32:08.439411Z"
+    },
+    "papermill": {
+     "duration": 0.012097,
+     "end_time": "2026-02-22T10:32:08.442126",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.430029",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [],
+   "source": [
+    "# You can write code in this cell\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c0076a6a",
+   "metadata": {
+    "papermill": {
+     "duration": 0.004536,
+     "end_time": "2026-02-22T10:32:08.451627",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.447091",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "It's natural to ask how accurate the model's predictions will be and how you can improve that. That will be you're next step.\n",
+    "\n",
+    "# Keep Going\n",
+    "\n",
+    "You are ready for **[Model Validation](https://www.kaggle.com/dansbecker/model-validation).**\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "30f584b2",
+   "metadata": {
+    "papermill": {
+     "duration": 0.00441,
+     "end_time": "2026-02-22T10:32:08.461052",
+     "exception": false,
+     "start_time": "2026-02-22T10:32:08.456642",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "source": [
+    "---\n",
+    "\n",
+    "\n",
+    "\n",
+    "\n",
+    "*Have questions or comments? Visit the [course discussion forum](https://www.kaggle.com/learn/intro-to-machine-learning/discussion) to chat with other learners.*"
+   ]
+  }
+ ],
+ "metadata": {
+  "kaggle": {
+   "accelerator": "none",
+   "dataSources": [
+    {
+     "databundleVersionId": 111096,
+     "sourceId": 10211,
+     "sourceType": "competition"
+    },
+    {
+     "databundleVersionId": 40228,
+     "datasetId": 2709,
+     "sourceId": 38454,
+     "sourceType": "datasetVersion"
+    },
+    {
+     "databundleVersionId": 15520,
+     "datasetId": 11167,
+     "sourceId": 15520,
+     "sourceType": "datasetVersion"
+    }
+   ],
+   "dockerImageVersionId": 31153,
+   "isGpuEnabled": false,
+   "isInternetEnabled": false,
+   "language": "python",
+   "sourceType": "notebook"
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.13"
+  },
+  "papermill": {
+   "default_parameters": {},
+   "duration": 10.883935,
+   "end_time": "2026-02-22T10:32:09.186463",
+   "environment_variables": {},
+   "exception": null,
+   "input_path": "__notebook__.ipynb",
+   "output_path": "__notebook__.ipynb",
+   "parameters": {},
+   "start_time": "2026-02-22T10:31:58.302528",
+   "version": "2.6.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
